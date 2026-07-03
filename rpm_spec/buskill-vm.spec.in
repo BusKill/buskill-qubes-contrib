@@ -1,0 +1,38 @@
+%global debug_package %{nil}
+Name: buskill-vm
+Version: @VERSION@
+Release: @REL@%{?dist}
+
+Summary: BusKill laptop kill cord for QubesOS (VM package)
+License: GPLv3+
+URL: https://www.buskill.in/
+
+Source0: %{name}-%{version}.tar.gz
+
+BuildRequires: make
+
+%description
+BusKill is a laptop kill cord. When the USB cable's magnetic breakaway is
+severed, it triggers your computer to lock, shutdown, or shred its LUKS
+encryption keys -- keeping your encrypted data safe from thieves.
+
+This package installs the udev rules and scripts for the sys-usb VM in
+QubesOS. Install this package in the TemplateVM used by your sys-usb qube.
+
+After installing this package, you must also install the buskill-dom0 package
+in dom0 to configure the qrexec services.
+
+%prep
+%setup -q
+
+%install
+make install-vm DESTDIR=$RPM_BUILD_ROOT
+
+%files
+%attr(0644, root, root) /etc/udev/rules.d/70-buskill.rules
+%attr(0644, root, root) /usr/lib/qubes-buskill/vm/buskill.rules
+%attr(0644, root, root) /usr/lib/qubes-buskill/vm/buskill.lock.rules
+%attr(0755, root, root) /usr/lib/qubes-buskill/vm/buskill-disarm.sh
+
+%changelog
+@CHANGELOG@

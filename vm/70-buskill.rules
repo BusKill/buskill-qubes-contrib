@@ -1,0 +1,11 @@
+################################################################################
+# File:    /etc/udev/rules.d/70-buskill.rules
+# Purpose: udev rules for BusKill (installed via QubesOS contrib package).
+#          Triggers on removal of ANY USB device.
+#          For more info, see: https://buskill.in/qubes-os/
+# License: GNU GPLv3
+################################################################################
+ACTION=="remove", SUBSYSTEM=="usb", RUN+="/usr/bin/qrexec-client-vm dom0 buskill.lock"
+#ACTION=="remove", SUBSYSTEM=="usb", RUN+="/usr/bin/qrexec-client-vm dom0 buskill.softShutdown"
+#ACTION=="remove", SUBSYSTEM=="usb", RUN+="/usr/bin/qrexec-client-vm dom0 buskill.hardReboot"
+#ACTION=="remove", SUBSYSTEM=="usb", RUN+="/usr/bin/qrexec-client-vm dom0 buskill.selfDestruct+--yes"

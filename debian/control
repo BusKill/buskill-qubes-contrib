@@ -1,13 +1,21 @@
-Source: qubes-skeleton
+Source: buskill
 Section: admin
 Priority: optional
-Maintainer: Qubes OS <user@qubes-os.org>
+Maintainer: BusKill Team <packages@buskill.in>
 Build-Depends: debhelper (>= 10), make
 Standards-Version: 4.4.0.1
-Homepage: https://www.qubes-os.org
+Homepage: https://www.buskill.in
 
-Package: qubes-skeleton
+Package: buskill-vm
 Architecture: all
-Depends: ${misc:Depends}
-Description: Qubes skeleton VM package
- Example component for Qubes OS.
+Depends: ${misc:Depends}, udev
+Description: BusKill laptop kill cord for QubesOS (VM package)
+ BusKill is a laptop kill cord. When the USB cable's magnetic breakaway is
+ severed, it triggers your computer to lock, shutdown, or shred its LUKS
+ encryption keys -- keeping your encrypted data safe from thieves.
+ .
+ This package installs the udev rules and scripts for the sys-usb VM in
+ QubesOS. Install this package in the TemplateVM used by your sys-usb qube.
+ .
+ After installing this package, you must also install the buskill-dom0 package
+ in dom0 to configure the qrexec services.

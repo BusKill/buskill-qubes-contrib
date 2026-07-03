@@ -1,0 +1,4 @@
+etc/udev/rules.d/70-buskill.rules
+usr/lib/qubes-buskill/vm/buskill.rules
+usr/lib/qubes-buskill/vm/buskill.lock.rules
+usr/lib/qubes-buskill/vm/buskill-disarm.sh
