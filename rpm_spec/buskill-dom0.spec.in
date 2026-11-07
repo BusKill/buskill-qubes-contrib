@@ -81,16 +81,20 @@ fi
 echo "BusKill installation complete. Restart the \"${USB_QUBE}\" qube and your interface qubes or reboot your computer for the changes to take effect." | fmt -w 72
 
 %preun
-# qubesctl wrapper; see %post for details
-qubesctl() { command qubesctl "$@" | sed 's/\x1b\[[0-9;]*[A-Za-z]//g' | fold -s -w 78; return ${PIPESTATUS[0]}; }
+# Do this only on removal, but not when upgrading.
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/#ordering
+# https://docs.fedoraproject.org/en-US/packaging-guidelines/Scriptlets/#_syntax
+if [ $1 -eq 0 ]; then
+    # qubesctl wrapper; see %post for details
+    qubesctl() { command qubesctl "$@" | sed 's/\x1b\[[0-9;]*[A-Za-z]//g' | fold -s -w 78; return ${PIPESTATUS[0]}; }
 
-USB_QUBE=$(/usr/bin/buskill-get-usb-qube)
+    USB_QUBE=$(/usr/bin/buskill-get-usb-qube)
 
-qubesctl top.disable buskill
-qubesctl state.apply buskill-dom0-uninstall
+    qubesctl top.disable buskill
+    qubesctl state.apply buskill-dom0-uninstall
 
-# Target specifically Debian and Fedora TemplateVMs - see %post for details
-SUPPORTED_TEMPLATEVMS=$(python3 -c "
+    # Target specifically Debian and Fedora TemplateVMs - see %post for details
+    SUPPORTED_TEMPLATEVMS=$(python3 -c "
 import re
 import qubesadmin
 qapp = qubesadmin.Qubes()
@@ -99,8 +103,9 @@ supported_templatevms = [vm.name for vm in qapp.domains.values()
          and re.match(r'^(debian|fedora)-[0-9]', vm.name)]
 print(','.join(supported_templatevms))
 ")
-if [ -n "$SUPPORTED_TEMPLATEVMS" ]; then
-    qubesctl --skip-dom0 --targets "$SUPPORTED_TEMPLATEVMS" state.apply buskill-uninstall
+    if [ -n "$SUPPORTED_TEMPLATEVMS" ]; then
+        qubesctl --skip-dom0 --targets "$SUPPORTED_TEMPLATEVMS" state.apply buskill-uninstall
+    fi
 fi
 
 %files
