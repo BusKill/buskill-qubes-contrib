@@ -3,7 +3,7 @@ Version: @VERSION@
 Release: @REL@%{?dist}
 
 Summary: Qubes BusKill package for dom0
-License: GPLv2+
+License: GPL-3.0-or-later AND LGPL-2.1-or-later
 URL: https://www.buskill.in/
 
 Source0: %{name}-%{version}.tar.gz
